@@ -19,17 +19,17 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: 'Bob'},
       messages: [
         {
           id: 1,
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
+          username: 'Bob',
+          content: 'Has anyone seen my marbles?',
         },
         {
           id: 2,
           username: null,
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+          content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
         }
       ]
     }
@@ -40,7 +40,7 @@ class App extends Component {
     let id = this.state.messages.length;
     let newMessage = {
       id: (id + 1),
-      username: message.username ? message.username : null,
+      username: message.username,
       content: message.content
     }
     const messages = this.state.messages.concat(newMessage);
