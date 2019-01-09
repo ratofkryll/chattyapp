@@ -28,10 +28,12 @@ class ChatBar extends Component {
     });
   }
 
+/* TODO: Change from 'onSubmit' to 'onKeyup', ref 'keyCode === 13' to deal with Safari being a giant pile of fuck. */
   handleSubmit(event) {
     event.preventDefault();
     console.log('New message!');
-    this.props.addNewMessage(this.state);
+    const message = this.state;
+    this.props.socket.send(JSON.stringify(message));
     this.setState({
       content: ''
     })

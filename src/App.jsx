@@ -21,7 +21,7 @@ class App extends Component {
     this.socket = new WebSocket('ws://localhost:3001');
 
     this.state = {
-      currentUser: {name: 'Bob'},
+      currentUser: {name: ''},
       messages: [
         {
           id: 1,
@@ -56,6 +56,12 @@ class App extends Component {
       console.log('Client: Connected to server!');
     }
 
+    this.socket.onmessage = (event) => {
+      console.log('Client: Send!');
+      const message = JSON.parse(event.data);
+      this.addNewMessage(message);
+    }
+
     setTimeout(() => {
       console.log('Simulating incoming message.');
       const newMessage = { id: 3, username: 'Michelle', content: 'Hello there!' };
@@ -69,7 +75,7 @@ class App extends Component {
       <div>
         <Navbar />
         <MessageList messages={ this.state.messages } />
-        <ChatBar currentUser={ this.state.currentUser.name } addNewMessage={ this.addNewMessage } />
+        <ChatBar currentUser={ this.state.currentUser.name } addNewMessage={ this.addNewMessage } socket={ this.socket } />
       </div>
     );
   }
