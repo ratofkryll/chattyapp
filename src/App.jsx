@@ -25,6 +25,11 @@ class App extends Component {
       messages: []
     }
     this.addNewMessage = this.addNewMessage.bind(this);
+    this.setCurrentUser = this.setCurrentUser.bind(this);
+  }
+
+  setCurrentUser(username) {
+    this.setState({ currentUser: username });
   }
 
   addNewMessage(message) {
@@ -48,6 +53,7 @@ class App extends Component {
       console.log('Client: Send!');
       const message = JSON.parse(event.data);
       this.addNewMessage(message);
+      this.setCurrentUser(message.username);
     }
   }
 
