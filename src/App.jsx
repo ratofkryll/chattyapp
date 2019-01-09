@@ -37,9 +37,9 @@ class App extends Component {
   }
 
   addNewMessage(message) {
-    let id = 4;
+    let id = this.state.messages.length;
     let newMessage = {
-      id: id,
+      id: (id + 1),
       username: message.username ? message.username : null,
       content: message.content
     }
