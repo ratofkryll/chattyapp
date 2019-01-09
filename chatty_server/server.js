@@ -1,5 +1,6 @@
 const express = require('express');
 const SocketServer = require('ws').Server;
+const uuid = require('uuid/v4');
 
 const PORT = 3001;
 
@@ -9,11 +10,18 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
+function addMessageId (data) {
+  const message = JSON.parse(data);
+  const username = message.username ? message.username : 'Anonymous';
+  message.id = uuid();
+  return JSON.stringify(message);
+}
+
 wss.broadcast = function(data) {
   wss.clients.forEach(client => {
     if (client.readyState === client.OPEN) {
-      console.log('Server: Broadcast!')
-      client.send(data);
+      const message = addMessageId(data);
+      client.send(message);
     } else {
       client.terminate();
     }
