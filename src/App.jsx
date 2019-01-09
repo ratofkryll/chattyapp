@@ -28,11 +28,23 @@ class App extends Component {
         },
         {
           id: 2,
-          username: "Anonymous",
+          username: null,
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
       ]
     }
+    this.addNewMessage = this.addNewMessage.bind(this);
+  }
+
+  addNewMessage(message) {
+    let id = 4;
+    let newMessage = {
+      id: id,
+      username: message.username ? message.username : null,
+      content: message.content
+    }
+    const messages = this.state.messages.concat(newMessage);
+    this.setState({ messages: messages })
   }
 
   componentDidMount() {
@@ -50,7 +62,7 @@ class App extends Component {
       <div>
         <Navbar />
         <MessageList messages={ this.state.messages } />
-        <ChatBar currentUser={ this.state.currentUser.name } />
+        <ChatBar currentUser={ this.state.currentUser.name } addNewMessage={ this.addNewMessage } />
       </div>
     );
   }

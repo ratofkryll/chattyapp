@@ -1,11 +1,44 @@
 import React, {Component} from 'react';
 
 class ChatBar extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: '',
+      content: ''
+    }
+
+    this.handleChangeUsername = this.handleChangeUsername.bind(this);
+    this.handleChangeContent = this.handleChangeContent.bind(this);
+  }
+
+  handleChangeUsername(event) {
+    let username = event.target.value;
+    this.setState({
+      username: username
+    });
+  }
+
+  handleChangeContent(event) {
+    let content = event.target.value;
+    this.setState({
+      content: content
+    });
+  }
+
   render() {
     return (
-      <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" defaultValue={ this.props.currentUser ? this.props.currentUser : null } />
-        <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
+      <footer>
+        <form className="chatbar" onSubmit={ event => {
+          event.preventDefault();
+          console.log('New message!');
+          this.props.addNewMessage(this.state);
+        }}>
+          <input name="username" type="text" className="chatbar-username" onChange={ this.handleChangeUsername } placeholder="Your Name (Optional)" defaultValue={ this.props.currentUser ? this.props.currentUser : null } />
+          <input name="message" type="text" className="chatbar-message" onChange={ this.handleChangeContent } placeholder="Type a message and hit ENTER" />
+          <input type="submit" className="hidden-submit" />
+        </form>
       </footer>
     );
   }
