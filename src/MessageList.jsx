@@ -13,7 +13,21 @@ class MessageList extends Component {
     });
     return (
       <main className="messages">
-        { message }
+        {this.props.messages.map(message => {
+          switch(message.type) {
+            case 'incomingMessage':
+              return (<Message message={ message } key={ message.id } />);
+              break;
+            case 'incomingNotification':
+              return (
+                <div className="message system" key={ message.id }>
+                  { message.content }
+                </div>)
+              break;
+            default:
+              throw new Error('Unknown event type ', message.type);
+          }
+        })}
       </main>
     );
   }

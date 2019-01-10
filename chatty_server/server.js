@@ -10,26 +10,38 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
-function addMessageId (data) {
-  const message = JSON.parse(data);
-  const username = message.username ? message.username : 'Anonymous';
-  message.id = uuid();
-  return JSON.stringify(message);
-}
-
-wss.broadcast = function(data) {
-  wss.clients.forEach(client => {
-    if (client.readyState === client.OPEN) {
-      const message = addMessageId(data);
-      client.send(message);
-    } else {
-      client.terminate();
+wss.broadcast = function broadcast(data) {
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === wss.OPEN) {
+      client.send(data);
     }
   })
 }
 
 wss.on('connection', (socket) => {
   console.log('Server: Client connected!');
-  socket.on('message', wss.broadcast);
+  console.log(wss.clients.size);
+  socket.on('message', function incoming(data) {
+    const parsed = JSON.parse(data);
+    switch(parsed.type) {
+      case 'postMessage':
+        const message = {
+          type: 'incomingMessage',
+          id: uuid(),
+          username: parsed.username,
+          content: parsed.content
+        };
+        wss.broadcast(JSON.stringify(message));
+        break;
+      case 'postNotification':
+        const notification = {
+          type: 'incomingNotification',
+          id: uuid(),
+          content: parsed.content
+        };
+        wss.broadcast(JSON.stringify(notification));
+        break
+    }
+  });
   socket.on('close', () => console.log('Server: Client disconnected!'));
 });

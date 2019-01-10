@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
+import Navbar from './Navbar.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
-
-class Navbar extends Component {
-  render() {
-    return (
-      <nav className="navbar">
-        <a href="/" className="navbar-brand">Chatty</a>
-      </nav>
-    );
-  }
-}
 
 class App extends Component {
   constructor(props) {
@@ -23,35 +14,16 @@ class App extends Component {
       messages: []
     }
     this.addNewMessage = this.addNewMessage.bind(this);
-    this.setCurrentUser = this.setCurrentUser.bind(this);
-  }
-
-  setCurrentUser(notification) {
-    const newCurrentUser = { name: notification.username };
-    const newNotification = {
-      id: notification.id,
-      type: 'notification',
-      prevUsername: this.state.currentUser.name,
-      username: notification.username,
-      message: ''
-    };
-    const newMessages = this.state.messages.concat(newNotification);
-    this.setState({
-      currentUser: newCurrentUser,
-      messages: newMessages
-    });
+    this.changeUser = this.changeUser.bind(this);
   }
 
   addNewMessage(message) {
-    const newMessage = {
-      id: message.id,
-      type: 'message',
-      prevUsername: message.username,
-      username: message.username,
-      content: message.content
-    }
-    const newMessages = this.state.messages.concat(newMessage);
+    const newMessages = this.state.messages.concat(message);
     this.setState({ messages: newMessages })
+  }
+
+  changeUser(newUser) {
+    this.setState({currentUser: { name: newUser }})
   }
 
   componentDidMount() {
@@ -62,7 +34,7 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       console.log('Client: Send!');
       const message = JSON.parse(event.data);
-      this.state.currentUser.name !== message.username  ? this.setCurrentUser(message) : this.addNewMessage(message);
+      this.addNewMessage(message);
     }
   }
 
@@ -71,7 +43,7 @@ class App extends Component {
       <div>
         <Navbar />
         <MessageList messages={ this.state.messages } />
-        <ChatBar currentUser={ this.state.currentUser.name } addNewMessage={ this.addNewMessage } socket={ this.socket } />
+        <ChatBar currentUser={ this.state.currentUser.name } addNewMessage={ this.addNewMessage } changeUser={ this.changeUser } socket={ this.socket } />
       </div>
     );
   }
