@@ -7,7 +7,8 @@ class MessageList extends Component {
       if (message.type === 'message') {
         return (<Message key={ message.id } username={ message.username } content={ message.content } />);
       } else if (message.type === 'notification') {
-        return (<Notification key={ message.id } prevUser={ this.props.prevUser } currentUser={ this.props.currentUser } />);
+        console.log(message);
+        return (<Notification key={ message.id } prevUser={ message.prevUsername } currentUser={ message.username } />);
       }
     });
     return (

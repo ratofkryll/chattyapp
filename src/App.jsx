@@ -31,7 +31,7 @@ class App extends Component {
     const newNotification = {
       id: notification.id,
       type: 'notification',
-      prevUsername: this.state.currentUser,
+      prevUsername: this.state.currentUser.name,
       username: notification.username,
       message: ''
     };
@@ -70,7 +70,7 @@ class App extends Component {
     return (
       <div>
         <Navbar />
-        <MessageList prevUser={ this.state.messages.prevUsername } currentUser={ this.state.currentUser } messages={ this.state.messages } />
+        <MessageList messages={ this.state.messages } />
         <ChatBar currentUser={ this.state.currentUser.name } addNewMessage={ this.addNewMessage } socket={ this.socket } />
       </div>
     );

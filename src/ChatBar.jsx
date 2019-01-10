@@ -42,7 +42,7 @@ class ChatBar extends Component {
     return (
       <footer>
         <form className="chatbar" onSubmit={ this.handleSubmit }>
-          <input name="username" type="text" className="chatbar-username" onChange={ this.handleChangeUsername } placeholder="Your Name (Optional)" defaultValue={ this.props.currentUser ? this.props.currentUser : null } />
+          <input name="username" type="text" className="chatbar-username" onChange={ this.handleChangeUsername } placeholder="Your Name (Optional)" />
           <input name="message" type="text" className="chatbar-message" onChange={ this.handleChangeContent } placeholder="Type a message and hit ENTER" value={ this.state.content } />
           <input type="submit" className="hidden-submit" />
         </form>
