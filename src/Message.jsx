@@ -13,9 +13,12 @@ class Message extends Component {
 
 class Notification extends Component {
   render() {
+    const prevUser = this.props.prevUser === undefined ? 'Anonymous' : this.props.prevUser;
+    const currentUser = this.props.currentUser.name === '' ? 'Anonymous' : this.props.currentUser.name;
+    const notification = `${ prevUser } changed their name to ${ currentUser }.`
     return (
       <div className="message system">
-        Anonymous1 changed their name to nomnom.
+        { notification }
       </div>
     );
   }
