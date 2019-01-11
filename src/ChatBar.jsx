@@ -50,7 +50,7 @@ class ChatBar extends Component {
       const notification = {
         type: 'postNotification',
         username: this.state.username,
-        content: `${ this.props.currentUser ? this.props.currentUser : 'Anonymous' } changed their name to ${this.state.username}.`
+        content: `${ this.props.currentUser ? this.props.currentUser : 'Anonymous' } changed their name to ${this.state.username ? this.state.username : 'Anonymous'}.`
       }
       this.props.socket.send(JSON.stringify(notification));
       this.props.changeUser(this.state.username);

@@ -10,6 +10,7 @@ class App extends Component {
     this.socket = new WebSocket('ws://localhost:3001');
 
     this.state = {
+      userCount: 0,
       currentUser: { name: '' },
       messages: []
     }
@@ -33,24 +34,26 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log(this.state.currentUser)
     this.socket.onopen = () => {
       console.log('Client: Connected to server!');
     }
 
     this.socket.onmessage = (event) => {
       console.log('Client: Data received!');
-      const data = JSON.parse(event.data);
-      console.log(data);
-        this.addNewMessage(data);
+      const parsed = JSON.parse(event.data);
+      console.log(parsed);
+      if (typeof parsed === 'number') {
+        this.setState({ userCount: parsed })
+      }
+      this.addNewMessage(parsed);
     }
   }
 
   render() {
-    console.log(this.state.currentUser)
+    console.log(this.state);
     return (
       <div>
-        <Navbar socket={ this.socket } />
+        <Navbar socket={ this.socket } userCount={ this.state.userCount } />
         <MessageList messages={ this.state.messages } />
         <ChatBar currentUser={ this.state.currentUser.name } addNewMessage={ this.addNewMessage } changeUser={ this.changeUser } socket={ this.socket } />
       </div>
