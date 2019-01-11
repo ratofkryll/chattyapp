@@ -12,7 +12,7 @@ Install all dependencies with the 'npm install' command in both the chatty_serve
 Start up the server in each of the above folders with 'npm start'
 Go to http://localhost:3000 in your browser
 
-##Dependencies
+## Dependencies
 - React
 - Webpack
 - babel-loader
