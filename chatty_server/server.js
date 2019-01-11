@@ -10,8 +10,10 @@ const server = express()
 
 const wss = new SocketServer({ server });
 
+// Initial user counter
 let num = 0;
 
+// Sends data to client
 wss.broadcast = function (data) {
   wss.clients.forEach(client => {
     if (client.readyState === client.OPEN) {
@@ -23,33 +25,36 @@ wss.broadcast = function (data) {
 }
 
 wss.on('connection', (socket) => {
-  console.log('Server: Client connected!');
+  // Increments online users counter
   num++;
   wss.broadcast(JSON.stringify(num));
+
+  // Catches incoming messages & notifications, and adds and ID
   socket.on('message', function incoming(data) {
-    const parsed = JSON.parse(data);
-    if (parsed.type === 'postMessage') {
+    const parsedData = JSON.parse(data);
+    if (parsedData.type === 'postMessage') {
       const message = {
         type: 'incomingMessage',
         id: uuid(),
-        username: parsed.username,
-        content: parsed.content
-      };
+        username: parsedData.username,
+        content: parsedData.content
+      }
       wss.broadcast(JSON.stringify(message));
-    } else if (parsed.type === 'postNotification') {
+    } else if (parsedData.type === 'postNotification') {
       const notification = {
         type: 'incomingNotification',
         id: uuid(),
-        username: parsed.username,
-        content: parsed.content
-      };
+        username: parsedData.username,
+        content: parsedData.content
+      }
       wss.broadcast(JSON.stringify(notification));
     } else {
-      console.log('Error: Unknown type: ', parsed.type);
+      console.log('Error: Unknown type: ', parsedData.type);
     }
   });
+
+  // Decrements online users counter
   socket.on('close', () => {
-    console.log('Server: Client disconnected!')
     num--;
     wss.broadcast(JSON.stringify(num));
   });

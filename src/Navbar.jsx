@@ -4,7 +4,7 @@ class OnlineCounter extends Component {
   render() {
     return (
       <span className="counter">{this.props.userCount} { this.props.userCount === 1 ? 'user' : 'users' } online</span>
-    )
+    );
   }
 }
 

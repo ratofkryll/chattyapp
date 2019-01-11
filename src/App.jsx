@@ -34,23 +34,17 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.socket.onopen = () => {
-      console.log('Client: Connected to server!');
-    }
-
+    /* Catches and filters data coming from the server */
     this.socket.onmessage = (event) => {
-      console.log('Client: Data received!');
-      const parsed = JSON.parse(event.data);
-      console.log(parsed);
-      if (typeof parsed === 'number') {
-        this.setState({ userCount: parsed })
+      const data = JSON.parse(event.data);
+      if (typeof data === 'number') {
+        this.setState({ userCount: data })
       }
-      this.addNewMessage(parsed);
+      this.addNewMessage(data);
     }
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <Navbar socket={ this.socket } userCount={ this.state.userCount } />

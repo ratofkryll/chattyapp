@@ -21,4 +21,4 @@ class Notification extends Component {
   }
 }
 
-export { Message, Notification };
+export { Message, Notification }
