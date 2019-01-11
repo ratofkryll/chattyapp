@@ -11,7 +11,8 @@ class ChatBar extends Component {
 
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleChangeContent = this.handleChangeContent.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleMessageKeyDown = this.handleMessageKeyDown.bind(this);
+    this.handleUsernameKeyDown = this.handleUsernameKeyDown.bind(this);
   }
 
   handleChangeUsername(event) {
@@ -28,24 +29,39 @@ class ChatBar extends Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log('Client: Form submit!');
-    const message = this.state;
-    this.props.socket.send(JSON.stringify(message));
-    this.setState({
-      content: ''
-    })
+  handleMessageKeyDown(event) {
+    if (event.keyCode === 13) {
+      console.log('Client: Message sent!');
+      const message = {
+        type: 'postMessage',
+        username: this.state.username,
+        content: this.state.content
+      }
+      this.props.socket.send(JSON.stringify(message));
+      this.setState({
+        content: ''
+      })
+    }
+  }
+
+  handleUsernameKeyDown(event) {
+    if (event.keyCode === 13 && this.props.currentUser !== this.state.username) {
+      console.log('Client: Username change sent!');
+      const notification = {
+        type: 'postNotification',
+        username: this.state.username,
+        content: `${ this.props.currentUser ? this.props.currentUser : 'Anonymous' } changed their name to ${this.state.username}.`
+      }
+      this.props.socket.send(JSON.stringify(notification));
+      this.props.changeUser(this.state.username);
+    }
   }
 
   render() {
     return (
-      <footer>
-        <form className="chatbar" onSubmit={ this.handleSubmit }>
-          <input name="username" type="text" className="chatbar-username" onChange={ this.handleChangeUsername } placeholder="Your Name (Optional)" />
-          <input name="message" type="text" className="chatbar-message" onChange={ this.handleChangeContent } placeholder="Type a message and hit ENTER" value={ this.state.content } />
-          <input type="submit" className="hidden-submit" />
-        </form>
+      <footer className="chatbar">
+          <input name="username" type="text" className="chatbar-username" onChange={ this.handleChangeUsername } onKeyDown={ this.handleUsernameKeyDown } placeholder="Your Name (Optional)" />
+          <input name="message" type="text" className="chatbar-message" onChange={ this.handleChangeContent } onKeyDown={ this.handleMessageKeyDown } placeholder="Type a message and hit ENTER" value={ this.state.content } />
       </footer>
     );
   }

@@ -4,11 +4,11 @@ import { Message, Notification } from './Message.jsx';
 class MessageList extends Component {
   render() {
     const message = this.props.messages.map((message) => {
-      if (message.type === 'message') {
+      if (message.type === 'incomingMessage') {
         return (<Message key={ message.id } username={ message.username } content={ message.content } />);
-      } else if (message.type === 'notification') {
-        console.log(message);
-        return (<Notification key={ message.id } prevUser={ message.prevUsername } currentUser={ message.username } />);
+      } else if (message.type === 'incomingNotification') {
+        console.log(this.props.currentUser);
+        return (<Notification key={ message.id } content={ message.content } />);
       }
     });
     return (
