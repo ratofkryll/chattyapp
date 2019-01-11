@@ -13,10 +13,10 @@ Start up the server in each of the above folders with 'npm start'
 Go to http://localhost:3000 in your browser
 
 ##Dependencies
-React
-Webpack
-babel-loader
-webpack-dev-server
-uuid
-express
-ws
+- React
+- Webpack
+- babel-loader
+- webpack-dev-server
+- uuid
+- express
+- ws
